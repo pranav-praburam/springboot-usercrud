@@ -45,16 +45,15 @@ public class UserController {
 
     // UPDATE
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        return userRepository.findById(id).map(user -> {
-            user.setName(updatedUser.getName());
-            user.setEmail(updatedUser.getEmail());
-            user.setAge(updatedUser.getAge());
-            return userRepository.save(user);
-        }).orElseGet(() -> {
-            updatedUser.setId(id);
-            return userRepository.save(updatedUser);
-        });
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setName(updatedUser.getName());
+                    user.setEmail(updatedUser.getEmail());
+                    user.setAge(updatedUser.getAge());
+                    return ResponseEntity.ok(userRepository.save(user));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE

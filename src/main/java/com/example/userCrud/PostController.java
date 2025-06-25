@@ -63,14 +63,14 @@ public class PostController {
     // UPDATE post
     @PutMapping("/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable Long id,
-                                           @Valid @RequestBody PostDTO postDTO) {
-        Post post = postRepository.findById(id)
+                                           @RequestBody Post updatedPost) {
+        Post existingPost = postRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        post.setTitle(postDTO.getTitle());
-        post.setContent(postDTO.getContent());
+        existingPost.setTitle(updatedPost.getTitle());
+        existingPost.setContent(updatedPost.getContent());
 
-        return ResponseEntity.ok(postRepository.save(post));
+        return ResponseEntity.ok(postRepository.save(existingPost));
     }
 
     // DELETE post
